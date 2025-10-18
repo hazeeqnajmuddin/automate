@@ -9,12 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
+    // ... inside the new migration file
+public function up(): void
+{
+    Schema::table('users', function (Blueprint $table) {
+        // We use nullable() because these fields are not required at registration
+        $table->string('full_name')->nullable()->after('name');
+        $table->string('phone_number')->nullable()->after('full_name');
+    });
+}
 
     /**
      * Reverse the migrations.

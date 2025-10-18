@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,9 +24,10 @@ Route::get('/register', [RegisterController::class, 'show'])->name('register');
 // Handles the form submission
 Route::post('/register', [RegisterController::class, 'store']);
 
-// Route::get('/register', function () {
-//     return view('manageSignUp.register');
-// })->name('register');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 Route::get('/home', function () {
     return view('home');

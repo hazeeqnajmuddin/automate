@@ -1,6 +1,6 @@
 <!-- Header / Navigation Bar -->
-<header>
-    <nav class="bg-gray-600 flex justify-between items-center px-6 py-3 text-white">
+<header class="sticky top-0 z-30">
+    <nav class="bg-gray-600 flex justify-between items-center px-6 py-3 sticky top-0 z-50 text-white">
 
         <!-- Logo -->
         <div class="flex items-center space-x-3">
@@ -17,7 +17,7 @@
             
             @auth
                 <!-- Authenticated (Logged-In) User Links -->
-                <a href="#" class="hover:text-gray-300 transition">My Profile</a>
+                <a href="{{ route('profile.show') }}" class="hover:text-gray-300 transition">My Profile</a>
                 <a href="#" class="hover:text-gray-300 transition">My Cars</a>
                 <a href="#" class="hover:text-gray-300 transition">AI</a>
                 
