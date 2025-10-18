@@ -11,6 +11,26 @@
             LOGO
         </div>
 
+         <!-- THIS IS THE SECTION THAT DISPLAYS THE TOAST -->
+        @if (session('success'))
+            <div id="success-popup" class="mb-4 font-medium text-sm text-green-700 bg-green-100 border border-green-400 p-3 rounded-md w-full text-center" role="alert">
+                {{ session('success') }}
+            </div>
+
+            <script>
+                // Optional: Automatically hide the message after 5 seconds
+                setTimeout(() => {
+                    const popup = document.getElementById('success-popup');
+                    if (popup) {
+                        popup.style.transition = 'opacity 0.5s ease';
+                        popup.style.opacity = '0';
+                        setTimeout(() => popup.remove(), 500); // Remove from DOM after fade out
+                    }
+                }, 5000);
+            </script>
+        @endif
+        <!-- End Toast Section -->
+
         <!-- Form -->
         <form action="{{ route('login') }}" method="POST" class="w-full max-w-sm space-y-4">
             @csrf
@@ -21,6 +41,11 @@
                 <input type="text" id="username" name="username"
                        class="border border-gray-400 rounded px-3 py-1 w-[60%]" required>
             </div>
+            
+            {{-- ADD THIS ERROR BLOCK --}}
+            @error('username')
+                <div class="text-red-500 text-sm text-right w-full">{{ $message }}</div>
+            @enderror
 
             <!-- Password -->
             <div class="flex items-center justify-between">
@@ -51,7 +76,7 @@
         <p class="mt-6 text-sm text-center">
             Don’t have an account? 
             <a 
-            href="{{ route('signUp') }}" class="font-semibold underline hover:text-gray-700"
+            href="{{ route('register') }}" class="font-semibold underline hover:text-gray-700"
             >Sign Up now!</a>
         </p>
     </div>
