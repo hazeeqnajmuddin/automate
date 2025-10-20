@@ -34,17 +34,24 @@
                     <button id="close-sidebar-btn" class="text-white hover:text-gray-300 text-2xl font-bold">&times;</button>
                 </div>
                 
-                <!-- Links moved from header into here -->
+                <!-- DYNAMIC LINKS BASED ON USER ROLE -->
                 <nav class="flex flex-col space-y-2">
-                    <a href="{{ url('/') }}" class="hover:bg-gray-700 p-2 rounded">Home</a>
-                    <a href="{{ route('profile.show') }}" class="hover:bg-gray-700 p-2 rounded">My Profile</a>
-                    <a href="#" class="hover:bg-gray-700 p-2 rounded">My Cars</a>
-                    <a href="#" class="hover:bg-gray-700 p-2 rounded">AI Recommendation</a>
-                    <a href="#" class="hover:bg-gray-700 p-2 rounded">Settings</a>
+                    @if(Auth::user()->user_role == 'admin')
+                        {{-- ADMIN LINKS --}}
+                        <a href="{{ route('admin.dashboard') }}" class="hover:bg-gray-700 p-2 rounded">Dashboard</a>
+                        <a href="{{ route('admin.users.index') }}" class="hover:bg-gray-700 p-2 rounded">Manage Users</a>
+                        {{-- You can add other admin-specific links here --}}
+                    @else
+                        {{-- REGULAR USER (CAR OWNER) LINKS --}}
+                        <a href="{{ route('profile.show') }}" class="hover:bg-gray-700 p-2 rounded">My Profile</a>
+                        <a href="#" class="hover:bg-gray-700 p-2 rounded">My Cars</a>
+                        <a href="#" class="hover:bg-gray-700 p-2 rounded">AI Recommendation</a>
+                        <a href="#" class="hover:bg-gray-700 p-2 rounded">Settings</a>
+                    @endif
                     
                     <hr class="border-gray-600 my-2">
 
-                    <!-- Logout Form -->
+                    <!-- Logout Form (same for both roles) -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full text-left hover:bg-gray-700 p-2 rounded">

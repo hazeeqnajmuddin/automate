@@ -13,52 +13,51 @@ class LoginController extends Controller
      */
     public function show()
     {
-        // This returns the Blade file you just showed me
-        // Assuming it's saved as resources/views/login.blade.php
-        // And you have a layouts/app.blade.php
         return view('manageLogin.login');
     }
 
     /**
      * Handle an authentication attempt.
      */
-    // ...
-public function login(Request $request)
-{
-    // 1. Validate the form data
-    $credentials = $request->validate([
-        'username' => ['required', 'string'],
-        'password' => ['required'],
-    ]);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required'],
+        ]);
+        
+        // ✅ Corrected: use 'user_email' to match your database column
+        $loginField = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'user_email' : 'username';
 
-    // 2. Attempt to log in using EITHER username or email
-    // This is a much better login experience for your users
-    
-    $loginField = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        \Log::info('Attempting login', [$loginField => $request->username]);
 
-    if (Auth::attempt([
-        $loginField => $request->username, 
-        'password' => $request->password
-    ])) {
-        // 3. Successful login
-        $request->session()->regenerate();
-        return redirect()->intended('/home');
+        // Attempt login with correct column
+        if (Auth::attempt([
+            $loginField => $request->username, 
+            'password' => $request->password
+        ])) {
+            $request->session()->regenerate();
+            // ✅ Redirect based on role
+        if (Auth::user()->user_role === 'admin') {
+            return redirect()->intended('/admin/dashboard')->with('success', 'Welcome back, Admin!');
+        }
+
+        return redirect()->intended('/home')->with('success', 'Login successful!');
     }
 
-    // 4. Failed login
-    return back()->withErrors([
-        'username' => 'The provided credentials do not match our records.',
-    ])->onlyInput('username');
-}
-public function logout(Request $request)
+        return back()->withErrors([
+            'username' => 'The provided credentials do not match our records.',
+        ])->onlyInput('username');
+    }
+
+    /**
+     * Log the user out of the application.
+     */
+    public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
-        return redirect('/'); // Redirect to the landing page after logout
+        return redirect('/');
     }
-
 }

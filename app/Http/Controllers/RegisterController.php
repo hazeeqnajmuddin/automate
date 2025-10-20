@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -15,6 +13,7 @@ class RegisterController extends Controller
      */
     public function show()
     {
+        // Using your updated view path
         return view('manageSignUp.register');
     }
 
@@ -26,21 +25,23 @@ class RegisterController extends Controller
         // 1. Validate the incoming data
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,user_email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-        // 'confirmed' automatically checks for a 'password_confirmation' field
 
-        // 2. Create the new user
+        // 2. Create the new user with the correct database column names
         $user = User::create([
-            'name' => $validated['name'],
+            // MODIFIED: Map 'name' from form to 'full_name' in DB
+            'full_name' => $validated['name'],
             'username' => $validated['username'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']), // Hash the password!
+            // MODIFIED: Map 'email' from form to 'user_email' in DB
+            'user_email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
         // 3. Redirect to the login page with a success message
         return redirect()->route('login')->with('success', 'Registration successful! Please log in.');
     }
 }
+

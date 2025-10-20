@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('tyre_conditions', function (Blueprint $table) {
+            $table->id('tyre_id');
+            $table->foreignId('car_id')->constrained('cars', 'car_id')->onDelete('cascade');
+            $table->string('tyre_size');
+            $table->string('tyre_tread');
+            $table->string('tyre_pressure');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('tyre_conditions');
+    }
+};

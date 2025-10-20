@@ -19,16 +19,29 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Profile Picture Section -->
             <div class="flex flex-col items-center md:items-start">
-                <div class="relative w-40 h-40 rounded-full bg-purple-200 flex items-center justify-center mb-4">
-                    <!-- Placeholder Icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <button class="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
-                        <!-- Edit Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L14.732 6.732z" /></svg>
-                    </button>
-                </div>
+                <!-- This form will handle the image upload -->
+                <form id="avatar-form" action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="relative w-40 h-40 rounded-full bg-purple-200 flex items-center justify-center mb-4">
+                        <!-- Display current profile picture or placeholder -->
+                        @if (Auth::user()->profile_pic_path)
+                            <img src="{{ asset('storage/' . Auth::user()->profile_pic_path) }}" alt="Profile Picture" class="w-full h-full rounded-full object-cover">
+                        @else
+                            <!-- Placeholder Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        @endif
+                        
+                        <!-- Hidden file input -->
+                        <input type="file" name="avatar" id="avatar-input" class="hidden" accept="image/*">
+
+                        <!-- Edit button that triggers the file input -->
+                        <button type="button" id="edit-avatar-btn" class="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L14.732 6.732z" /></svg>
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <!-- Profile Details Form -->
@@ -48,7 +61,7 @@
                     <!-- Email -->
                     <div>
                         <label for="email" class="block text-lg font-medium text-gray-700">Email:</label>
-                        <input type="email" id="email" name="email" value="{{ $user->email }}" class="mt-1 block w-full px-3 py-2 bg-gray-200 border border-gray-300 rounded-md shadow-sm sm:text-sm" disabled>
+                        <input type="email" id="email" name="email" value="{{ $user->user_email }}" class="mt-1 block w-full px-3 py-2 bg-gray-200 border border-gray-300 rounded-md shadow-sm sm:text-sm" disabled>
                     </div>
 
                     <!-- Full Name -->
@@ -89,4 +102,23 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const editButton = document.getElementById('edit-avatar-btn');
+        const fileInput = document.getElementById('avatar-input');
+        const avatarForm = document.getElementById('avatar-form');
+
+        // When the edit button is clicked, trigger the hidden file input
+        editButton.addEventListener('click', function () {
+            fileInput.click();
+        });
+
+        // When a file is selected, automatically submit the form
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+                avatarForm.submit();
+            }
+        });
+    });
+</script>
 @endsection
