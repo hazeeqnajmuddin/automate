@@ -38,11 +38,12 @@
                 <nav class="flex flex-col space-y-2">
                     @if(Auth::user()->user_role == 'admin')
                         {{-- ADMIN LINKS --}}
-                        <a href="{{ route('admin.dashboard') }}" class="hover:bg-gray-700 p-2 rounded">Dashboard</a>
+                        <a href="{{ route('admin.dashboard') }}" class="hover:bg-gray-700 p-2 rounded">Admin Dashboard</a>
                         <a href="{{ route('admin.users.index') }}" class="hover:bg-gray-700 p-2 rounded">Manage Users</a>
                         {{-- You can add other admin-specific links here --}}
                     @else
                         {{-- REGULAR USER (CAR OWNER) LINKS --}}
+                        <a href="{{ route('home') }}" class="hover:bg-gray-700 p-2 rounded">Home</a>
                         <a href="{{ route('profile.show') }}" class="hover:bg-gray-700 p-2 rounded">My Profile</a>
                         <a href="#" class="hover:bg-gray-700 p-2 rounded">My Cars</a>
                         <a href="#" class="hover:bg-gray-700 p-2 rounded">AI Recommendation</a>
