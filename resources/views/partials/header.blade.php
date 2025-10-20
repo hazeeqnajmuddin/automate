@@ -2,15 +2,26 @@
 <header class="sticky top-0 z-30">
     <nav class="bg-gray-600 flex justify-between items-center px-6 py-3 sticky top-0 z-50 text-white">
 
-        <!-- Logo -->
-        <div class="flex items-center space-x-3">
-            <a 
-                href="{{ url('/') }}" 
-                class="w-20 h-20 bg-black rounded-full flex items-center justify-center text-white font-bold text-sm hover:bg-gray-800 transition text-center"
-            >
-                Automate
-            </a>
-        </div>
+     <!-- Logo -->
+    <div class="flex items-center space-x-3">
+        @php
+            // Determine the correct URL for the logo based on user role
+            $logoUrl = url('/'); // Default for guests
+            if (Auth::check()) {
+                if (Auth::user()->user_role == 'admin') {
+                    $logoUrl = route('admin.dashboard');
+                } else {
+                    $logoUrl = route('home');
+                }
+            }
+        @endphp
+        <a 
+            href="{{ $logoUrl }}" 
+            class="w-20 h-20 bg-black rounded-full flex items-center justify-center text-white font-bold text-sm hover:bg-gray-800 transition text-center"
+        >
+            Automate
+        </a>
+    </div>
 
         <!-- Links Section -->
         <div class="flex items-center space-x-6">
