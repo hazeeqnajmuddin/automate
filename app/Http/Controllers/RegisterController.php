@@ -38,6 +38,7 @@ class RegisterController extends Controller
             // MODIFIED: Map 'email' from form to 'user_email' in DB
             'user_email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'user_role' => 'car_owner',
         ]);
 
         // 3. Redirect to the login page with a success message

@@ -21,7 +21,7 @@
             @if(Auth::user()->user_role == 'admin')
                 {{-- Admin Header Title --}}
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-white hover:text-gray-300">Manage System Users</a>
+                    <a href="{{ route('admin.users.index') }}" class="text-white hover:text-gray-300">Manage System Users</a>
                 </div>
             @else
                 {{-- Regular User Header Links --}}

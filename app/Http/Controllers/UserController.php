@@ -11,27 +11,25 @@ class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * This will be our "Manage System Users" page.
+     * This is the "Manage System Users" page.
      */
     public function index()
     {
         $users = User::all();
-        // We will create this new view file in the next step
+        // This returns the view you have on your Canvas
         return view('admin.users.index', ['users' => $users]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     * This is the "Add User" page.
+     * Show the form for creating a new user.
      */
     public function create()
     {
-        // We will create this view file
         return view('admin.users.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created user in storage.
      */
     public function store(Request $request)
     {
@@ -43,45 +41,42 @@ class UserController extends Controller
             'user_role' => ['required', Rule::in(['car_owner', 'admin'])],
         ]);
 
-        User::create([
-            'full_name' => $validated['full_name'],
-            'username' => $validated['username'],
-            'user_email' => $validated['user_email'],
-            'password' => Hash::make($validated['password']),
-            'user_role' => $validated['user_role'],
-        ]);
+        // We need to hash the password before creating the user
+        $validated['password'] = Hash::make($validated['password']);
+
+        User::create($validated);
 
         return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     * This is the "User's Profile" page for admins.
+     * Show the form for editing the specified user.
      */
     public function edit(User $user)
     {
-        // We will create this view file
         return view('admin.users.edit', ['user' => $user]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified user in storage.
      */
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->user_id, 'user_id')],
-            'user_email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->user_id, 'user_id')],
+            'username' => ['required', 'string', 'max:255', Rule::unique('users', 'username')->ignore($user->user_id, 'user_id')],
+            'user_email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'user_email')->ignore($user->user_id, 'user_id')],
             'user_role' => ['required', Rule::in(['car_owner', 'admin'])],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
+        // Update the user's data
         $user->full_name = $validated['full_name'];
         $user->username = $validated['username'];
         $user->user_email = $validated['user_email'];
         $user->user_role = $validated['user_role'];
 
+        // Only update the password if a new one was provided
         if ($request->filled('password')) {
             $user->password = Hash::make($validated['password']);
         }
@@ -92,11 +87,11 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified user from storage.
      */
     public function destroy(User $user)
     {
-        // You might want to add a check here to prevent an admin from deleting themselves
+        // Add a check to prevent an admin from deleting their own account
         if ($user->user_id === auth()->id()) {
             return back()->with('error', 'You cannot delete your own account.');
         }
@@ -106,3 +101,4 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 }
+
