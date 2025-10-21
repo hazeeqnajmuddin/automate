@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -28,6 +29,11 @@ class UserController extends Controller
         return view('admin.users.create');
     }
 
+    public function show(User $user)
+    {
+        return view('admin.users.show', ['user' => $user]);
+    }
+
     /**
      * Store a newly created user in storage.
      */
@@ -39,10 +45,19 @@ class UserController extends Controller
             'user_email' => ['required', 'string', 'email', 'max:255', 'unique:users,user_email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'user_role' => ['required', Rule::in(['car_owner', 'admin'])],
+            'profile_pic' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
         ]);
 
         // We need to hash the password before creating the user
         $validated['password'] = Hash::make($validated['password']);
+
+        // Handle the profile picture upload if a file is provided
+        if ($request->hasFile('profile_pic')) {
+            $path = $request->file('profile_pic')->store('avatars', 'public');
+            // Add the path to the validated data array
+            $validated['profile_pic_path'] = $path;
+        }
+
 
         User::create($validated);
 
@@ -68,7 +83,18 @@ class UserController extends Controller
             'user_email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'user_email')->ignore($user->user_id, 'user_id')],
             'user_role' => ['required', Rule::in(['car_owner', 'admin'])],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'profile_pic' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
         ]);
+
+            // Handle the profile picture upload if a new file is provided
+            if ($request->hasFile('profile_pic')) {
+                // Delete the old picture from storage if it exists
+                if ($user->profile_pic_path) {
+                    Storage::disk('public')->delete($user->profile_pic_path);
+                }
+                // Store the new picture and update the path in the database
+                $user->profile_pic_path = $request->file('profile_pic')->store('avatars', 'public');
+            }
 
         // Update the user's data
         $user->full_name = $validated['full_name'];

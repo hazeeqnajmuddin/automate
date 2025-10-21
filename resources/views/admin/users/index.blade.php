@@ -38,7 +38,7 @@
                     </thead>
                     <tbody class="text-gray-700">
                         @forelse ($users as $user)
-                            <tr class="border-b hover:bg-gray-100">
+                            <tr class="border-b hover:bg-gray-100" data-href="{{ route('admin.users.show', $user) }}">
                                 <td class="py-3 px-4">{{ $loop->iteration }}</td>
                                 <td class="py-3 px-4">{{ $user->username }}</td>
                                 <td class="py-3 px-4">{{ $user->user_email }}</td>
@@ -83,4 +83,29 @@
 
     </div>
 </div>
+
+{{-- ADDED: JavaScript to handle row clicks --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Find all table rows that have a 'data-href' attribute
+        const rows = document.querySelectorAll('tr[data-href]');
+
+        rows.forEach(row => {
+            row.addEventListener('click', function () {
+                // Navigate to the URL specified in the 'data-href' attribute
+                window.location.href = this.dataset.href;
+            });
+        });
+
+        // Find all action buttons/links within the table
+        const actionButtons = document.querySelectorAll('.action-button');
+
+        actionButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                // Stop the click from bubbling up to the table row
+                event.stopPropagation();
+            });
+        });
+    });
+</script>
 @endsection

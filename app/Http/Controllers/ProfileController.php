@@ -61,7 +61,7 @@ class ProfileController extends Controller
     {
         // 1. Validate the uploaded file
         $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // Max 2MB
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $user = Auth::user();
