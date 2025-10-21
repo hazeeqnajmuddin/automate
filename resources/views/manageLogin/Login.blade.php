@@ -7,9 +7,7 @@
     <div class="bg-gray-300 p-10 rounded-md shadow-md w-[500px] flex flex-col items-center">
 
         <!-- Logo -->
-        <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center text-white font-bold mb-6">
-            LOGO
-        </div>
+        <img src="{{ asset('images/logo3.png') }}" alt="Automate Logo" class="w-32 h-auto">
 
          <!-- THIS IS THE SECTION THAT DISPLAYS THE TOAST -->
         @if (session('success'))

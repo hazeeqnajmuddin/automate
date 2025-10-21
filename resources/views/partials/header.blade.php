@@ -1,25 +1,11 @@
 <!-- Header / Navigation Bar -->
 <header class="sticky top-0 z-30">
-    <nav class="bg-gray-600 flex justify-between items-center px-6 py-3 sticky top-0 z-50 text-white">
+    <nav class="bg-slate-800 flex justify-between items-center px-6 py-3 sticky top-0 z-50 text-white">
 
-     <!-- Logo -->
-    <div class="flex items-center space-x-3">
-        @php
-            // Determine the correct URL for the logo based on user role
-            $logoUrl = url('/'); // Default for guests
-            if (Auth::check()) {
-                if (Auth::user()->user_role == 'admin') {
-                    $logoUrl = route('admin.dashboard');
-                } else {
-                    $logoUrl = route('home');
-                }
-            }
-        @endphp
-        <a 
-            href="{{ $logoUrl }}" 
-            class="w-20 h-20 bg-black rounded-full flex items-center justify-center text-white font-bold text-sm hover:bg-gray-800 transition text-center"
-        >
-            Automate
+     <div class="flex items-center space-x-3">
+        {{-- MODIFIED: Replaced the div with an img tag for the logo --}}
+        <a href="{{ Auth::check() && Auth::user()->user_role == 'admin' ? route('admin.dashboard') : url('/') }}">
+            <img src="{{ asset('images/logo4.png') }}" alt="Automate Logo" class="h-16 w-auto">
         </a>
     </div>
 

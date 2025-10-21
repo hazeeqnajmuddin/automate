@@ -4,8 +4,6 @@
 
 @section('content')
     <div class="flex justify-center items-center min-h-[80vh]">
-        <div class="w-72 h-72 bg-black rounded-full flex items-center justify-center">
-            <h1 class="text-white text-4xl font-extrabold">AUTOMATE</h1>
-        </div>
+        <img src="{{ asset('images/logo3.png') }}" alt="Automate Logo" class="w-72 h-auto">
     </div>
 @endsection
