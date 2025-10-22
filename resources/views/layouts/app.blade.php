@@ -48,7 +48,7 @@
                         {{-- REGULAR USER (CAR OWNER) LINKS --}}
                         <a href="{{ route('home') }}" class="hover:bg-gray-700 p-2 rounded">Home</a>
                         <a href="{{ route('profile.show') }}" class="hover:bg-gray-700 p-2 rounded">My Profile</a>
-                        <a href="#" class="hover:bg-gray-700 p-2 rounded">My Cars</a>
+                        <a href="{{ route('cars.index') }}" class="hover:bg-gray-700 p-2 rounded">My Cars</a>
                         <a href="#" class="hover:bg-gray-700 p-2 rounded">AI Recommendation</a>
                         <a href="#" class="hover:bg-gray-700 p-2 rounded">Settings</a>
                     @endif

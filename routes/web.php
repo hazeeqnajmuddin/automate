@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    // --- CAR MANAGEMENT ROUTES ---
+    // This creates routes like /cars, /cars/create, /cars/{car}/edit, etc.
+    Route::resource('cars', CarController::class);
 
     // --- ADMIN-ONLY ROUTES ---
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {

@@ -52,4 +52,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the cars associated with the user.
+     * Defines the one-to-many relationship.
+     */
+    public function cars()
+    {
+        // A user has many cars. We need to specify the foreign key ('user_id')
+        // and the local key ('user_id' on this users table) because they are non-standard.
+        return $this->hasMany(Car::class, 'user_id', 'user_id');
+    }
 }
