@@ -126,5 +126,20 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
+
+    /**
+     * Display a listing of the specified user's cars (Admin view).
+     */
+    public function showCars(User $user)
+    {
+        // Eager load the cars relationship
+        $user->load('cars'); 
+
+        // Pass the user and their cars to the admin view
+        return view('admin.users.cars', [
+            'user' => $user,
+            'cars' => $user->cars 
+        ]);
+    }
 }
 

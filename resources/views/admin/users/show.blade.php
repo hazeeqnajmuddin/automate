@@ -55,7 +55,7 @@
             <a href="{{ route('admin.users.edit', $user) }}" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                 Edit User Profile
             </a>
-            <a href="{{ route('admin.users.index', $user) }}" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900">
+            <a href="{{ route('admin.users.cars', $user) }}" class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900">
                 Cars
             </a>
         </div>

@@ -25,7 +25,7 @@
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="{{ route('profile.show') }}" class="text-white hover:text-gray-300">My Profile</a>
                     <a href="{{ route('cars.index') }}" class="text-white hover:text-gray-300">My Cars</a>
-                    <a href="#" class="text-white hover:text-gray-300">AI</a>
+                    <a href="{{ route('ai.index') }}" class="text-white hover:text-gray-300">AI</a>
                 </div>
             @endif
             

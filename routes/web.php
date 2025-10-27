@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\AiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,12 +55,18 @@ Route::middleware('auth')->group(function () {
     // This creates routes like /cars, /cars/create, /cars/{car}/edit, etc.
     Route::resource('cars', CarController::class);
 
+    // --- AI SERVICE RECOMMENDATION ROUTES ---
+    // ADD THESE TWO LINES:
+    Route::get('/ai-recommender', [AiController::class, 'index'])->name('ai.index');
+    Route::get('/ai-recommender/generate', [AiController::class, 'generateRecommendations'])->name('ai.recommend');
+
     // --- ADMIN-ONLY ROUTES ---
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         
         // ADDED: This single line creates all the routes for the UserController
         Route::resource('users', UserController::class);
+        Route::get('/users/{user}/cars', [UserController::class, 'showCars'])->name('users.cars'); 
     });
 });
 
