@@ -63,4 +63,9 @@ class User extends Authenticatable
         // and the local key ('user_id' on this users table) because they are non-standard.
         return $this->hasMany(Car::class, 'user_id', 'user_id');
     }
+
+    public function getEmailForPasswordReset()
+    {
+        return $this->user_email;
+    }
 }

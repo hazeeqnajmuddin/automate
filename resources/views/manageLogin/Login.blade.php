@@ -55,7 +55,7 @@
             <!-- Forgot password -->
             <div class="text-right">
                 <a 
-                {{-- href="{{ route('password.request') }}" class="text-sm text-black underline hover:text-gray-700" --}}
+                href="{{ route('password.request') }}" class="text-sm text-black underline hover:text-gray-700"
                 >
                     Forgot Password?
                 </a>

@@ -9,6 +9,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\AiController;
 
+use App\Http\Controllers\CustomForgotPasswordController;
+use App\Http\Controllers\CustomResetPasswordController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,6 +37,13 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [RegisterController::class, 'show'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);
+
+    // --- CUSTOM PASSWORD RESET ROUTES ---
+    // THIS IS THE ROUTE THAT WAS MISSING OR INCORRECT:
+    Route::get('password/reset', [CustomForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [CustomForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [CustomResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/update', [CustomResetPasswordController::class, 'reset'])->name('password.update');
 });
 
 
