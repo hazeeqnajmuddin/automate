@@ -57,10 +57,11 @@
                         </div>
 
                          <div>
-                            <label for="age" class="block text-sm font-medium text-gray-700">Age:</label>
-                            <input type="number" id="age" name="age" value="{{ old('age', $car->age) }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" required min="0">
-                            @error('age') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                        </div>
+        <label for="age" class="block text-lg font-medium text-gray-700">Age (Years):</label>
+        {{-- MODIFIED: Added readonly and a placeholder/default value --}}
+        <input type="number" id="age" name="age" value="{{ old('age', $car->age ?? 0) }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" readonly min="0">
+        {{-- We remove the error block for 'age' since it's auto-calculated --}}
+    </div>
 
                          <div>
                             <label for="license_plate" class="block text-sm font-medium text-gray-700">License Plate:</label>
@@ -113,4 +114,30 @@
         </div>
     </div>
 </div>
+{{-- ADDED: JavaScript for automatic age calculation --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const registeredYearInput = document.getElementById('registered_year');
+        const ageInput = document.getElementById('age');
+        
+        function calculateAge() {
+            const currentYear = new Date().getFullYear();
+            const registeredYear = parseInt(registeredYearInput.value, 10);
+            
+            if (registeredYear && registeredYear <= currentYear && registeredYear.toString().length === 4) {
+                const age = currentYear - registeredYear;
+                ageInput.value = age >= 0 ? age : 0;
+            } else {
+                ageInput.value = 0; // Default to 0 if year is invalid or not set
+            }
+        }
+        
+        // Add event listener to the year input
+        if (registeredYearInput) {
+            registeredYearInput.addEventListener('input', calculateAge);
+            // Calculate age on page load (for the edit form)
+            calculateAge(); 
+        }
+    });
+</script>
 @endsection

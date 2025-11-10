@@ -95,9 +95,11 @@ class CarController extends Controller
             'mileage' => ['required', 'integer', 'min:0'],
             // Ensure license plate is unique, ignoring the current car's plate
             'license_plate' => ['required', 'string', 'max:255', Rule::unique('cars', 'license_plate')->ignore($car->car_id, 'car_id')],
-             'age' => ['required', 'integer', 'min:0'],
             'battery_light_on' => ['nullable', 'boolean'],
         ]);
+
+        // Automatically calculate and add the age
+        $validated['age'] = date('Y') - $validated['registered_year'];
 
         // Update the car record with the validated data
         $car->update($validated);
