@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Car;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -141,5 +142,18 @@ class UserController extends Controller
             'cars' => $user->cars 
         ]);
     }
+
+    public function showCarDetails(User $user, Car $car)
+{
+    if ($car->user_id !== $user->user_id) {
+        abort(404, 'Asset/Owner mismatch detected.');
+    }
+
+    return view('admin.users.car_details', [
+        'user' => $user,
+        'car' => $car
+    ]);
+}
+
 }
 

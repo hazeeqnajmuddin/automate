@@ -76,7 +76,8 @@ Route::middleware('auth')->group(function () {
         
         // ADDED: This single line creates all the routes for the UserController
         Route::resource('users', UserController::class);
-        Route::get('/users/{user}/cars', [UserController::class, 'showCars'])->name('users.cars'); 
+        Route::get('/users/{user}/cars', [UserController::class, 'showCars'])->name('users.cars');
+        Route::get('/users/{user}/cars/{car}', [UserController::class, 'showCarDetails'])->name('users.car_details');
     });
 });
 

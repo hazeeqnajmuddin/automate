@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('mileage');
             $table->boolean('battery_light_on')->default(false);
             $table->string('license_plate')->unique();
+            $table->string('car_image_path')->nullable();
             $table->timestamps();
         });
     }

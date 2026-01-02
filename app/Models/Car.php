@@ -4,24 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Car extends Model
 {
     use HasFactory;
 
-    /**
-     * The primary key associated with the table.
-     *
-     * @var string
-     */
     protected $primaryKey = 'car_id';
 
-    /**
-     * The attributes that are mass assignable.
-     * These should match the columns in your 'cars' table migration.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'user_id',
         'model',
@@ -33,16 +24,47 @@ class Car extends Model
         'mileage',
         'battery_light_on',
         'license_plate',
+        'car_image_path',
     ];
 
     /**
      * Get the user that owns the car.
-     * Defines the inverse of the one-to-many relationship.
      */
     public function user()
     {
-        // A car belongs to a user. We need to specify the foreign key ('user_id')
-        // and the owner key ('user_id' on the users table) because they are non-standard.
         return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+
+    /**
+     * RELATIONSHIPS FOR DIAGNOSTICS (Feature Set for DT)
+     */
+
+    public function engineCondition(): HasOne
+    {
+        return $this->hasOne(EngineCondition::class, 'car_id', 'car_id');
+    }
+
+    public function brakeCondition(): HasOne
+    {
+        return $this->hasOne(BrakeCondition::class, 'car_id', 'car_id');
+    }
+
+    public function tyreCondition(): HasOne
+    {
+        return $this->hasOne(TyreCondition::class, 'car_id', 'car_id');
+    }
+
+    /**
+     * RELATIONSHIPS FOR OUTPUTS
+     */
+
+    public function aiRecommendations(): HasMany
+    {
+        return $this->hasMany(AIRecommendation::class, 'car_id', 'car_id');
+    }
+
+    public function serviceHistories(): HasMany
+    {
+        return $this->hasMany(ServiceHistory::class, 'car_id', 'car_id');
     }
 }
