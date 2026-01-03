@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\AccidentHistory;
+use App\Models\ServiceHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -202,4 +204,110 @@ public function store(Request $request)
 
         return redirect()->route('cars.index')->with('success', 'Car deleted successfully.');
     }
+
+    public function show(Car $car)
+    {
+        // Authorization check
+        if ($car->user_id !== Auth::id()) {
+            abort(403, 'Access Denied: You do not own this asset.');
+        }
+
+        // Eager load all diagnostics for the show.blade view
+        $car->load(['engineCondition', 'brakeCondition', 'tyreCondition']);
+
+        return view('cars.show', compact('car'));
+    }
+
+    public function serviceHistory(Car $car)
+{
+    // Ensure the user owns the car
+    if ($car->user_id !== Auth::id()) {
+        abort(403);
+    }
+
+    // Eager load histories to prevent multiple queries
+    $car->load('serviceHistories');
+
+    return view('cars.service_history', compact('car'));
+}
+
+public function manageServices(Car $car)
+    {
+        if ($car->user_id !== Auth::id()) abort(403);
+        $car->load('serviceHistories');
+        return view('cars.manage_services', compact('car'));
+    }
+
+    public function storeService(Request $request, Car $car)
+    {
+        if ($car->user_id !== Auth::id()) abort(403);
+        $validated = $request->validate([
+            'service_date' => ['required', 'date'],
+            'service_type' => ['required', 'string'],
+            'service_location' => ['required', 'string', 'max:255'],
+            'service_description' => ['required', 'string'],
+        ]);
+        $car->serviceHistories()->create($validated);
+        return back()->with('success', 'Service logged successfully.');
+    }
+
+    public function destroyService(Car $car, ServiceHistory $service)
+    {
+        if ($car->user_id !== Auth::id() || $service->car_id !== $car->car_id) abort(403);
+        $service->delete();
+        return back()->with('success', 'Service entry removed.');
+    }
+    
+public function accidentHistory(Car $car) {
+    if ($car->user_id !== Auth::id()) abort(403);
+    $car->load('accidentHistories');
+    return view('cars.accident_history', compact('car'));
+}
+
+/**
+ * Display the management interface for car accidents.
+ */
+public function manageAccidents(Car $car)
+{
+    if ($car->user_id !== Auth::id()) abort(403);
+    
+    // Eager load histories to display them in the "Manage" section
+    $car->load('accidentHistories');
+    
+    return view('cars.manage_accidents', compact('car'));
+}
+
+/**
+ * Store a new accident/incident record.
+ */
+public function storeAccident(Request $request, Car $car)
+{
+    if ($car->user_id !== Auth::id()) abort(403);
+
+    $validated = $request->validate([
+        'AnD_date' => ['required', 'date'],
+        'AnD_type' => ['required', 'string'],
+        'AnD_location' => ['required', 'string', 'max:255'],
+        'AnD_description' => ['required', 'string'],
+    ]);
+
+    $car->accidentHistories()->create($validated);
+
+    return back()->with('success', 'Incident successfully added to the vehicle ledger.');
+}
+
+/**
+ * Delete a specific accident record.
+ */
+public function destroyAccident(Car $car, AccidentHistory $accident)
+{
+    // Security check: ensure the accident belongs to this specific car and user
+    if ($car->user_id !== Auth::id() || $accident->car_id !== $car->car_id) {
+        abort(403);
+    }
+
+    $accident->delete();
+
+    return back()->with('success', 'Incident record has been permanently purged.');
+}
 }

@@ -64,6 +64,18 @@ Route::middleware('auth')->group(function () {
     // --- CAR MANAGEMENT ROUTES ---
     // This creates routes like /cars, /cars/create, /cars/{car}/edit, etc.
     Route::resource('cars', CarController::class);
+    Route::get('/cars/{car}', [CarController::class, 'show'])->name('cars.show');
+    Route::resource('cars', CarController::class)->except(['show']);
+
+    Route::get('/cars/{car}/accident-history', [CarController::class, 'accidentHistory'])->name('cars.accident_history');
+    Route::get('/cars/{car}/accident-management', [CarController::class, 'manageAccidents'])->name('cars.manage_accidents');
+    Route::post('/cars/{car}/accident', [CarController::class, 'storeAccident'])->name('cars.accident.store');
+    Route::delete('/cars/{car}/accident/{accident}', [CarController::class, 'destroyAccident'])->name('cars.accident.destroy');
+    
+    Route::get('/cars/{car}/service-history', [CarController::class, 'serviceHistory'])->name('cars.service_history');
+    Route::get('/cars/{car}/service-management', [CarController::class, 'manageServices'])->name('cars.manage_services');
+    Route::post('/cars/{car}/service', [CarController::class, 'storeService'])->name('cars.service.store');
+    Route::delete('/cars/{car}/service/{service}', [CarController::class, 'destroyService'])->name('cars.service.destroy');
 
     // --- AI SERVICE RECOMMENDATION ROUTES ---
     // ADD THESE TWO LINES:

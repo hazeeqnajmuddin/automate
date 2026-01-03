@@ -54,11 +54,11 @@
                     <!-- Navigation Action Grid -->
                     <div class="mt-12 w-full space-y-4">
                         <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-4 text-center">History Records</p>
-                        <a href="#" class="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all group/link">
+                        <a href="{{ route('cars.accident_history', $car) }}" class="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all group/link">
                             <span class="text-xs font-black text-white uppercase tracking-widest">Accident History</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </a>
-                        <a href="#" class="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all group/link">
+                        <a href="{{ route('cars.service_history', $car) }}" class="flex items-center justify-between p-5 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-all group/link">
                             <span class="text-xs font-black text-white uppercase tracking-widest">Service History</span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-600 group-hover/link:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </a>

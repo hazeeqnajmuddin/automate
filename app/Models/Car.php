@@ -67,4 +67,7 @@ class Car extends Model
     {
         return $this->hasMany(ServiceHistory::class, 'car_id', 'car_id');
     }
+    public function accidentHistories() {
+    return $this->hasMany(AccidentHistory::class, 'car_id', 'car_id');
+}
 }

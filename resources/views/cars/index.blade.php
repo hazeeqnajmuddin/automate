@@ -90,15 +90,18 @@
 
                         <div class="flex flex-col md:flex-row items-center gap-10">
                             {{-- Visual Image / Icon --}}
-                            <div class="shrink-0 w-32 h-32 md:w-40 md:h-40 bg-slate-50 rounded-3xl border border-gray-100 group-hover:bg-indigo-50 transition-colors overflow-hidden flex items-center justify-center">
+                            <a href="{{ route('cars.show', $car) }}" class="shrink-0 w-32 h-32 md:w-40 md:h-40 bg-slate-50 rounded-3xl border border-gray-100 group-hover:bg-indigo-50 transition-colors overflow-hidden flex items-center justify-center relative group/img">
                                 @if($car->car_image_path)
-                                    <img src="{{ asset('storage/' . $car->car_image_path) }}" alt="{{ $car->brand }} image" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . $car->car_image_path) }}" alt="{{ $car->brand }} image" class="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500">
                                 @else
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                     </svg>
                                 @endif
-                            </div>
+                                <div class="absolute inset-0 bg-indigo-600/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                    <span class="bg-white text-indigo-600 text-[8px] font-black px-2 py-1 rounded uppercase tracking-tighter">View Report</span>
+                                </div>
+                            </a>
 
                             <div class="flex-1 text-center md:text-left">
                                 <h2 class="text-3xl font-black text-gray-900 tracking-tighter uppercase italic leading-none">
@@ -127,6 +130,9 @@
                             </div>
 
                             <div class="shrink-0 flex flex-col space-y-3 pt-6 md:pt-0">
+                                <a href="{{ route('cars.show', $car) }}" class="inline-flex items-center justify-center px-8 py-3 bg-indigo-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg active:scale-95">
+                                    View Report
+                                </a>
                                 <a href="{{ route('cars.edit', $car) }}" class="inline-flex items-center justify-center px-8 py-3 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-lg active:scale-95">
                                     Update
                                 </a>
