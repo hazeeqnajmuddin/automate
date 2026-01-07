@@ -36,11 +36,12 @@
                     <div class="w-full flex flex-col items-center">
                         <div class="h-48 w-full rounded-3xl bg-indigo-600 flex items-center justify-center border-4 border-white shadow-2xl rotate-3 mb-8 group-hover:rotate-0 transition-transform duration-500 overflow-hidden">
                             {{-- Car Image Placeholder / or real image if added in future --}}
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <img src="{{ asset('images/car1.jpg') }}"  class="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-500">
+                            {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                            </svg>
+                            </svg> --}}
                         </div>
-                        <h2 class="text-3xl font-black text-white tracking-tighter uppercase italic text-center leading-none">2017 Perodua Myvi SE</h2>
+                        <h2 class="text-3xl font-black text-white tracking-tighter uppercase italic text-center leading-none">2020 Honda Civic</h2>
                         <div class="mt-4 px-4 py-1 bg-white/10 rounded-full">
                             <span class="text-[9px] font-black text-indigo-300 uppercase tracking-widest">Active Fleet Asset</span>
                         </div>

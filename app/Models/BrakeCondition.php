@@ -14,7 +14,6 @@ class BrakeCondition extends Model
     protected $fillable = [
         'car_id',
         'brake_effectiveness',
-        'brake_noise',
     ];
 
     public function car()
