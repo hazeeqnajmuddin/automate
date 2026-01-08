@@ -95,7 +95,7 @@ public function store(Request $request)
         ]);
     });
 
-    return redirect()->route('cars.index')->with('success', 'Car and diagnostics recorded.');
+    return redirect()->route('cars.index')->with('success', 'Car Successfully Added.');
 }
 
 

@@ -80,8 +80,9 @@ Route::middleware('auth')->group(function () {
     // --- AI SERVICE RECOMMENDATION ROUTES ---
     // ADD THESE TWO LINES:
     Route::get('/ai-recommender', [AiController::class, 'index'])->name('ai.index');
-    Route::get('/ai-recommender/generate', [AiController::class, 'generateRecommendations'])->name('ai.recommend');
+    Route::post('/ai-recommender/generate', [AiController::class, 'generateRecommendations'])->name('ai.recommend');
 
+Route::post('/ai-recommender/predict', [AiController::class, 'predict'])->name('ai.predict');
     // --- ADMIN-ONLY ROUTES ---
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

@@ -32,10 +32,8 @@ class RegisterController extends Controller
 
         // 2. Create the new user with the correct database column names
         $user = User::create([
-            // MODIFIED: Map 'name' from form to 'full_name' in DB
             'full_name' => $validated['name'],
             'username' => $validated['username'],
-            // MODIFIED: Map 'email' from form to 'user_email' in DB
             'user_email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'user_role' => 'car_owner',

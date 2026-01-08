@@ -205,9 +205,9 @@
                                     <label for="brake_effectiveness" class="block text-[10px] font-black uppercase tracking-widest text-gray-400">Brake Effectiveness</label>
                                     <select id="brake_effectiveness" name="brake_effectiveness" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-indigo-500 focus:ring-0 transition-all outline-none bg-gray-50 font-bold uppercase" required>
                                         <option value="" disabled selected>— Select Status —</option>
-                                        <option value="High" {{ old('brake_effectiveness') == 'High' ? 'selected' : '' }}>High / Firm</option>
-                                        <option value="Medium" {{ old('brake_effectiveness') == 'Medium' ? 'selected' : '' }}>Medium / Average</option>
-                                        <option value="Low" {{ old('brake_effectiveness') == 'Low' ? 'selected' : '' }}>Low / Mushy</option>
+                                        <option value="High" {{ old('brake_effectiveness') == 'High' ? 'selected' : '' }}>High / Firm</option> <!-- 3 -->  
+                                        <option value="Medium" {{ old('brake_effectiveness') == 'Medium' ? 'selected' : '' }}>Medium / Average</option> <!-- 2 -->  
+                                        <option value="Low" {{ old('brake_effectiveness') == 'Low' ? 'selected' : '' }}>Low / Mushy</option> <!-- 1 -->  
                                     </select>
                                     @error('brake_effectiveness') <p class="text-red-500 text-[10px] font-bold uppercase tracking-tight mt-1">{{ $message }}</p> @enderror
                                 </div>
@@ -215,9 +215,9 @@
                                     <label for="tyre_tread" class="block text-[10px] font-black uppercase tracking-widest text-gray-400">Tyre Tread Condition</label>
                                     <select id="tyre_tread" name="tyre_tread" class="w-full border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-indigo-500 focus:ring-0 transition-all outline-none bg-gray-50 font-bold uppercase" required>
                                         <option value="" disabled selected>— Select Condition —</option>
-                                        <option value="New" {{ old('tyre_tread') == 'New' ? 'selected' : '' }}>New / Excellent</option>
-                                        <option value="Good" {{ old('tyre_tread') == 'Good' ? 'selected' : '' }}>Good / Fair</option>
-                                        <option value="Worn" {{ old('tyre_tread') == 'Worn' ? 'selected' : '' }}>Worn / Bald</option>
+                                        <option value="New" {{ old('tyre_tread') == 'New' ? 'selected' : '' }}>New / Excellent</option> <!-- 3 -->
+                                        <option value="Good" {{ old('tyre_tread') == 'Good' ? 'selected' : '' }}>Good / Fair</option> <!-- 2 -->
+                                        <option value="Worn" {{ old('tyre_tread') == 'Worn' ? 'selected' : '' }}>Worn / Bald</option> <!-- 1 -->    
                                     </select>
                                     @error('tyre_tread') <p class="text-red-500 text-[10px] font-bold uppercase tracking-tight mt-1">{{ $message }}</p> @enderror
                                 </div>

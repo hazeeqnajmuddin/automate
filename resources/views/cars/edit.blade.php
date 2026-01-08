@@ -187,7 +187,7 @@
                                         <option value="Good" {{ old('tyre_tread', $car->tyreCondition->tyre_tread ?? '') == 'Good' ? 'selected' : '' }}>Good / Fair</option>
                                         <option value="Worn" {{ old('tyre_tread', $car->tyreCondition->tyre_tread ?? '') == 'Worn' ? 'selected' : '' }}>Worn / Bald</option>
                                     </select>
-                                </div>s
+                                </div>
                             </div>
                         </div>
 

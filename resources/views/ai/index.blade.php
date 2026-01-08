@@ -3,6 +3,24 @@
 @section('title', 'AI Service Recommender')
 
 @section('content')
+@if ($errors->any())
+    <div class="max-w-7xl mx-auto mb-6">
+        <div class="bg-red-50 border-l-4 border-red-500 p-4">
+            <div class="flex">
+                <div class="ml-3">
+                    <p class="text-sm text-red-700 font-black uppercase italic">
+                        Validation Error Detected:
+                    </p>
+                    <ul class="mt-1 list-disc list-inside text-xs text-red-600 font-bold">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 <div class="container mx-auto p-4 md:p-12">
     <div class="max-w-7xl mx-auto">
         
@@ -57,51 +75,22 @@
                     
                     <form action="{{ route('ai.recommend') }}" method="POST" class="space-y-10">
                         @csrf
-
-                        <!-- Car Selector -->
                         <div class="space-y-4">
                             <label for="car_id" class="block text-[10px] font-black uppercase tracking-widest text-gray-400">Target Vehicle</label>
-                            <div class="relative">
-                                <select id="car_id" name="car_id" 
-                                        class="w-full border-2 border-gray-100 rounded-2xl px-6 py-5 focus:border-indigo-500 focus:ring-0 transition-all outline-none bg-gray-50 font-black text-xl uppercase tracking-tighter cursor-pointer appearance-none" 
-                                        required>
-                                    <option value="" disabled selected>— Choose A Vehicle —</option>
-                                    @forelse($userCars as $car)
-                                        <option value="{{ $car->car_id }}" {{ old('car_id') == $car->car_id ? 'selected' : '' }}>
-                                            {{ $car->registered_year }} {{ $car->brand }} {{ $car->model }}
-                                        </option>
-                                    @empty
-                                        <option value="" disabled>No vehicles found in your garage</option>
-                                    @endforelse
-                                </select>
-                                <!-- Custom Arrow -->
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-6 text-indigo-600">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
-                                </div>
-                            </div>
-                            @error('car_id') <p class="text-red-500 text-[10px] font-bold uppercase tracking-tight mt-1">{{ $message }}</p> @enderror
+                            <select id="car_id" name="car_id" class="w-full border-2 border-gray-100 rounded-2xl px-6 py-5 font-black text-xl uppercase tracking-tighter" required>
+                                <option value="" disabled selected>— Choose A Vehicle —</option>
+                                @foreach($userCars as $car)
+                                    <option value="{{ $car->car_id }}">{{ $car->registered_year }} {{ $car->brand }} {{ $car->model }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <!-- Update Link -->
-                        <div class="flex items-center space-x-4 p-5 bg-slate-50 rounded-2xl border border-gray-100">
-                            <div class="p-2 bg-white rounded-lg shadow-sm text-indigo-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            </div>
-                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest leading-relaxed">
-                                Missing data? <a href="{{ route('cars.index') }}" class="text-indigo-600 underline hover:text-indigo-800 transition-colors">Update your car information</a> to improve AI accuracy.
-                            </p>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="pt-4">
-                            <a href="{{ route('ai.recommend') }}" type="submit" 
-                                    class="w-full bg-indigo-600 text-white py-6 rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/30 active:scale-95 flex items-center justify-center space-x-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                                <span>Generate Recommendations</span>
-                            </a>
-                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 text-white py-6 rounded-2xl font-black text-sm uppercase tracking-[0.3em] hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-500/30 flex items-center justify-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            <span>Generate Roadmap Now</span>
+                        </button>
                     </form>
                 </div>
 
