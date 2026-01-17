@@ -11,12 +11,12 @@
         ['label' => 'Oil Filter Replacement', 'val' => $results['scheduler'][1], 'price' => 45, 'desc' => 'Filtration System', 'color' => 'indigo'],
         ['label' => 'Spark Plug Change', 'val' => $results['scheduler'][2], 'price' => 125, 'desc' => 'Ignition System', 'color' => 'indigo'],
         ['label' => 'Coolant Liquid Refill', 'val' => $results['scheduler'][3], 'price' => 85, 'desc' => 'Cooling System', 'color' => 'indigo'],
-        ['label' => 'Brake Pad Replacement', 'val' => $results['wear_tear'][0], 'price' => 195, 'desc' => 'Braking System', 'color' => 'amber'],
-        ['label' => 'Tyre Replacement', 'val' => $results['wear_tear'][1], 'price' => 280, 'desc' => 'Traction & Safety', 'color' => 'amber'],
-        ['label' => 'Wheel Alignment', 'val' => $results['wear_tear'][2], 'price' => 65, 'desc' => 'Handling & Balance', 'color' => 'amber'],
-        ['label' => 'Engine Diagnostic', 'val' => $results['doctor'][0], 'price' => 150, 'desc' => 'Critical System Analysis', 'color' => 'red'],
-        ['label' => 'Battery Replacement', 'val' => $results['doctor'][1], 'price' => 230, 'desc' => 'Electrical System', 'color' => 'red'],
-        ['label' => 'Transmission Fluid', 'val' => $results['doctor'][2], 'price' => 210, 'desc' => 'Drivetrain Management', 'color' => 'red'],
+        ['label' => 'Brake Pad Replacement', 'val' => $results['wear_tear'][0], 'price' => 195, 'desc' => 'Braking System', 'color' => 'indigo'],
+        ['label' => 'Tyre Replacement', 'val' => $results['wear_tear'][1], 'price' => 280, 'desc' => 'Traction & Safety', 'color' => 'indigo'],
+        ['label' => 'Wheel Alignment', 'val' => $results['wear_tear'][2], 'price' => 65, 'desc' => 'Handling & Balance', 'color' => 'indigo'],
+        ['label' => 'Engine Diagnostic', 'val' => $results['doctor'][0], 'price' => 150, 'desc' => 'Critical System Analysis', 'color' => 'indigo'],
+        ['label' => 'Battery Replacement', 'val' => $results['doctor'][1], 'price' => 230, 'desc' => 'Electrical System', 'color' => 'indigo'],
+        ['label' => 'Transmission Fluid', 'val' => $results['doctor'][2], 'price' => 210, 'desc' => 'Drivetrain Management', 'color' => 'indigo'],
     ];
 
     $activeRecommendations = array_filter($recommendationMap, fn($item) => $item['val'] == 1);
@@ -56,10 +56,10 @@
                             <img src="{{ asset('storage/' . $car->car_image_path) }}" class="w-full h-full object-cover">
                         </div>
                         <h2 class="text-3xl font-black text-white tracking-tighter uppercase italic text-center leading-none">
-                            {{ $car->registered_year }} {{ $car->brand }} {{ $car->model }}
+                            {{ $car->license_plate }} 
                         </h2>
                         <div class="mt-4 px-4 py-1 bg-white/10 rounded-full">
-                            <span class="text-[9px] font-black text-indigo-300 uppercase tracking-widest">VIN: {{ $car->license_plate }}</span>
+                            <span class="text-[20px] font-black text-indigo-300 uppercase tracking-widest">{{ $car->registered_year }} {{ $car->brand }} {{ $car->model }}</span>
                         </div>
                     </div>
 
@@ -67,10 +67,6 @@
                         <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
                             <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Current Mileage</p>
                             <p class="text-white font-black italic">{{ number_format($car->mileage) }} KM</p>
-                        </div>
-                        <div class="bg-white/5 p-5 rounded-2xl border border-white/10">
-                            <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">Model Accuracy</p>
-                            <p class="text-emerald-400 font-black italic">99.7% Precision</p>
                         </div>
                     </div>
                 </div>
@@ -93,9 +89,6 @@
 
                             <div class="text-center md:text-right">
                                 <p class="text-2xl font-black text-gray-900 tracking-tighter italic">RM {{ number_format($item['price'], 2) }}</p>
-                                <div class="mt-2 inline-flex items-center px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-[9px] font-black uppercase tracking-widest border border-gray-200">
-                                    AI Verified
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -111,7 +104,6 @@
                     <div class="flex flex-col md:flex-row justify-between items-center">
                         <div>
                             <h4 class="text-sm font-black text-indigo-300 uppercase tracking-widest italic">Total Estimated Maintenance</h4>
-                            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Calculated based on 3-Tree AI Ensemble results</p>
                         </div>
                         <div class="mt-4 md:mt-0">
                             <p class="text-5xl font-black text-white tracking-tighter italic leading-none">RM {{ number_format($totalCost, 2) }}</p>

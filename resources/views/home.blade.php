@@ -35,7 +35,7 @@
                     <div class="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
                 <div class="mt-12 text-center">
-                    <h2 class="text-4xl font-black text-white tracking-tighter uppercase italic">Automate</h2>
+                    <h2 class="text-4xl font-black text-white tracking-tighter uppercase italic">CIMS</h2>
                     <div class="h-1 w-24 bg-indigo-500 mx-auto mt-2 rounded-full"></div>
                     <p class="text-indigo-200 font-medium mt-4 tracking-wide">Smart Care for Your Car</p>
                 </div>
@@ -124,7 +124,7 @@
         </div>
     </div>
 
-    <!-- Full-width Help Section just above the footer -->
+    {{-- <!-- Full-width Help Section just above the footer -->
     <div class="mt-20 w-full">
         <div class="bg-gradient-to-r from-slate-800 to-indigo-900 p-10 rounded-3xl text-center shadow-xl">
             <h4 class="text-2xl font-bold text-white mb-2">Stuck or Need Assistance?</h4>
@@ -135,6 +135,6 @@
             </div>
             <p class="text-indigo-300/60 text-sm mt-8">Copyright &copy; {{ date('Y') }} Automate Car Service. All systems operational.</p>
         </div>
-    </div>
+    </div> --}}
 </div>
 @endsection

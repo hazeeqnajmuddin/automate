@@ -48,7 +48,7 @@
                             @endif
                         </div>
                         <h2 id="side-preview-title" class="text-2xl font-black text-white tracking-tighter uppercase italic text-center">{{ $car->brand }} {{ $car->model }}</h2>
-                        <p class="text-indigo-400 font-bold mt-1 uppercase tracking-widest text-[10px]">VIN: {{ $car->license_plate }}</p>
+                        <p class="text-indigo-400 font-bold mt-1 uppercase tracking-widest text-[20px]">VIN: {{ $car->license_plate }}</p>
                     </div>
 
                     <!-- Navigation Action Grid -->

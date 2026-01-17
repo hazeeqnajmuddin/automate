@@ -9,7 +9,7 @@
         <!-- Logo & Brand -->
         <div class="flex flex-col items-center mb-10 group">
             <img src="{{ asset('images/logo.png') }}" alt="Automate Logo" class="w-24 h-auto transform transition-transform group-hover:scale-110 duration-500">
-            <h1 class="mt-4 text-4xl font-black text-gray-900 tracking-tighter uppercase italic">Automate</h1>
+            <h1 class="mt-4 text-4xl font-black text-gray-900 tracking-tighter uppercase italic">CIMS</h1>
             <div class="h-1 w-12 bg-indigo-600 mt-1 rounded-full"></div>
         </div>
 

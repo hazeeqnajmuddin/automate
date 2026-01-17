@@ -7,7 +7,7 @@
             <a href="{{ Auth::check() && Auth::user()->user_role == 'admin' ? route('admin.dashboard') : url('/') }}" class="flex items-center space-x-3 group">
                 {{-- MODIFIED: Replaced the div with an img tag for the logo and added brand text --}}
                 <img src="{{ asset('images/logo.png') }}" alt="Automate Logo" class="h-12 w-auto transform transition-transform group-hover:scale-110 duration-300">
-                <span class="text-2xl font-black tracking-tighter uppercase italic group-hover:text-indigo-400 transition-colors duration-300">Automate</span>
+                <span class="text-2xl font-black tracking-tighter uppercase italic group-hover:text-indigo-400 transition-colors duration-300">CIMS</span>
             </a>
         </div>
 

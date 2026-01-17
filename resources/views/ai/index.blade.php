@@ -80,7 +80,7 @@
                             <select id="car_id" name="car_id" class="w-full border-2 border-gray-100 rounded-2xl px-6 py-5 font-black text-xl uppercase tracking-tighter" required>
                                 <option value="" disabled selected>— Choose A Vehicle —</option>
                                 @foreach($userCars as $car)
-                                    <option value="{{ $car->car_id }}">{{ $car->registered_year }} {{ $car->brand }} {{ $car->model }}</option>
+                                    <option value="{{ $car->car_id }}">{{ $car->license_plate }} ({{ $car->registered_year }} {{ $car->brand }} {{ $car->model }})</option>
                                 @endforeach
                             </select>
                         </div>
