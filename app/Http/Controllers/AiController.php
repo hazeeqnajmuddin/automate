@@ -46,6 +46,7 @@ class AiController extends Controller
             'engine_noise' => ($car->engine_noise == 'Normal') ? 0 : 1,
             'engine_light' => (float)$car->engine_light,
             'battery_light_on' => (int)$car->battery_light_on,
+            'problem_description' => $request->input('problem_description', ''), // Pass the prompt
     ];
 
     try {

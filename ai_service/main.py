@@ -37,25 +37,53 @@ class VehicleFeatures(BaseModel):
     engine_noise: int
     engine_light: float
     battery_light_on: int
+    problem_description: str = "" # Optional field for user text input
 
 @app.post("/predict")
 def predict_maintenance(data: VehicleFeatures):
     try:
-        # 1. Map input to a dictionary with the EXACT column names from training
+        # 1. Process text prompt to override features if symptoms are detected
+        overrides = {}
+        if data.problem_description:
+            text = data.problem_description.lower()
+            
+            # --- FEATURE OVERRIDE LOGIC ---
+            # If user complains about brakes, simulate "Low" effectiveness (1)
+            if any(w in text for w in ["brake", "screech", "squeak", "grind"]):
+                overrides['brake_effectiveness'] = 1
+                
+            # If noise/knocking, simulate "Abnormal" engine noise (1)
+            if any(w in text for w in ["noise", "knock", "sound", "clatter", "click"]):
+                overrides['engine_noise'] = 1
+                
+            # If tyre issues, simulate "Worn" tyres (1)
+            if any(w in text for w in ["tyre", "tire", "vibrate", "shake", "wobble"]):
+                overrides['tyre_tread'] = 1
+                
+            # If engine startup/smoke issues, simulate Check Engine Light On (1.0)
+            if any(w in text for w in ["engine", "smoke", "power", "stall"]):
+                overrides['engine_light'] = 1.0
+                
+            # If battery issues, simulate Battery Light On (1)
+            if any(w in text for w in ["battery", "start", "dim", "crank"]):
+                overrides['battery_light_on'] = 1
+
+        # 2. Map input to a dictionary with the EXACT column names from training
+        # Apply overrides if present, otherwise use the data from the request
         input_dict = {
             'age': [data.age],
             'fuel_type': [data.fuel_type],
             'transmission_type': [data.transmission_type],
             'engine_size': [data.engine_size],
             'mileage': [data.mileage],
-            'tyre_tread': [data.tyre_tread],
-            'brake_effectiveness': [data.brake_effectiveness],
+            'tyre_tread': [overrides.get('tyre_tread', data.tyre_tread)],
+            'brake_effectiveness': [overrides.get('brake_effectiveness', data.brake_effectiveness)],
             'brand': [data.brand],
             'model': [data.model],
             'registered_year': [data.registered_year],
-            'engine_noise': [data.engine_noise],
-            'engine_light': [data.engine_light],
-            'battery_light_on': [data.battery_light_on]
+            'engine_noise': [overrides.get('engine_noise', data.engine_noise)],
+            'engine_light': [overrides.get('engine_light', data.engine_light)],
+            'battery_light_on': [overrides.get('battery_light_on', data.battery_light_on)]
         }
 
         # 2. Convert to DataFrame to provide "Feature Names" and resolve UserWarnings
