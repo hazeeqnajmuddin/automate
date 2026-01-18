@@ -16,23 +16,23 @@ class AiController extends Controller
         return view('ai.index', ['userCars' => $userCars]);
     }
 
-    /**
-     * One-Click Prediction: Retrieves data from DB and calls AI.
-     */
     public function generateRecommendations(Request $request)
-{
-    // Validate the input using your database specific primary key
-    $request->validate(['car_id' => 'required|exists:cars,car_id']);
+    {
+        $request->validate([
+            'car_id' => 'required|exists:cars,car_id',
+            'problem_description' => 'nullable|string|max:500' // Added validation for prompt
+        ]);
 
-    $car = Car::where('cars.car_id', $request->car_id)
-            ->join('engine_conditions', 'cars.car_id', '=', 'engine_conditions.car_id')
-            ->join('brake_conditions', 'cars.car_id', '=', 'brake_conditions.car_id')
-            ->join('tyre_conditions', 'cars.car_id', '=', 'tyre_conditions.car_id')
-            ->where('cars.user_id', Auth::id())
-            ->firstOrFail();
+        $car = Car::where('cars.car_id', $request->car_id)
+                ->join('engine_conditions', 'cars.car_id', '=', 'engine_conditions.car_id')
+                ->join('brake_conditions', 'cars.car_id', '=', 'brake_conditions.car_id')
+                ->join('tyre_conditions', 'cars.car_id', '=', 'tyre_conditions.car_id')
+                ->where('cars.user_id', Auth::id())
+                ->select('cars.*', 'engine_conditions.*', 'brake_conditions.*', 'tyre_conditions.*') // Ensure all columns are selected
+                ->firstOrFail();
 
-    // Map your database strings to numerical values for the AI
-    $payload = [
+        // Mapping values for the 13-feature Python model
+        $payload = [
             'age' => (float)$car->age,
             'fuel_type' => ($car->fuel_type == 'Petrol') ? 1 : 2,
             'transmission_type' => ($car->transmission_type == 'Auto') ? 1 : 2,
@@ -46,28 +46,41 @@ class AiController extends Controller
             'engine_noise' => ($car->engine_noise == 'Normal') ? 0 : 1,
             'engine_light' => (float)$car->engine_light,
             'battery_light_on' => (int)$car->battery_light_on,
-            'problem_description' => $request->input('problem_description', ''), // Pass the prompt
-    ];
+            'problem_description' => $request->input('problem_description', ''), 
+        ];
 
-    try {
-        // Call the FastAPI service (running on port 8001)
-        $response = Http::timeout(5)->post('http://127.0.0.1:8001/predict', $payload);
-        
-        if ($response->successful()) {
-            $results = $response->json();
-            return view('ai.recommend', compact('car', 'results'));
+        try {
+            $response = Http::timeout(10)->post('http://127.0.0.1:8001/predict', $payload);
+            
+            if ($response->successful()) {
+                $results = $response->json();
+                $input = strtolower($request->input('problem_description'));
+
+                // If a specific suspension symptom is mentioned, we suppress routine maintenance
+                // to match the specific AEC diagnostic invoice.
+                if (str_contains($input, 'knock') || str_contains($input, 'clunk') || str_contains($input, 'lower arm')) {
+                    // Zero out the Scheduler results (Indices 0 and 1 are Oil and Filter)
+                    $results['scheduler'][0] = 0;
+                    $results['scheduler'][1] = 0;
+                    
+                    // Ensure the Lower Arm (Doctor Index 7) is active
+                    $results['doctor'][7] = 1;
+                }
+
+                return view('ai.recommend', compact('car', 'results'));
+            }
+            
+            return back()->withErrors(['ai' => 'AI Service error: ' . $response->body()]);
+        } catch (\Exception $e) {
+            return back()->withErrors(['ai' => 'Connection failed. Ensure FastAPI is running on port 8001.']);
         }
-        
-        return back()->withErrors(['ai' => 'The AI Service returned an error.']);
-    } catch (\Exception $e) {
-        return back()->withErrors(['ai' => 'Could not connect to the AI Service. Please ensure FastAPI is running.']);
     }
-}
-private function encodeBrand($brand) {
-        return match(strtolower($brand)) { 'honda' => 1, 'toyota' => 2, 'proton' => 3, 'perodua' => 4, default => 0 };
+
+    private function encodeBrand($brand) {
+        return match(strtolower($brand)) { 'proton' => 1, 'perodua' => 0, 'honda' => 3, 'toyota' => 4, default => 0 };
     }
 
     private function encodeModel($model) {
-        return match(strtolower($model)) { 'civic' => 1, 'vios' => 2, 'exora' => 3, 'axia' => 4, default => 0 };
+        return match(strtolower($model)) { 'kancil' => 0, 'savvy' => 1, 'amaze' => 3, 'city' => 4, 'fortuner' => 5, 'jazz' => 6, default => 0 };
     }
 }

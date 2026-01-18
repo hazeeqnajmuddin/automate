@@ -4,19 +4,35 @@
 
 @section('content')
 @php
-    // Define the labels and prices for each AI target index
-    // This matches the target groups we trained in Python Phase 4
+    $model = strtolower($car->model);
+
+    // Engine Oil Pricing
+    $oilPrice = match($model) {
+        'savvy'  => 116,
+        'kancil' => 63,
+        default  => 180,
+    };
+
     $recommendationMap = [
-        ['label' => 'Engine Oil Change', 'val' => $results['scheduler'][0], 'price' => 180, 'desc' => 'Lubrication System', 'color' => 'indigo'],
-        ['label' => 'Oil Filter Replacement', 'val' => $results['scheduler'][1], 'price' => 45, 'desc' => 'Filtration System', 'color' => 'indigo'],
-        ['label' => 'Spark Plug Change', 'val' => $results['scheduler'][2], 'price' => 125, 'desc' => 'Ignition System', 'color' => 'indigo'],
-        ['label' => 'Coolant Liquid Refill', 'val' => $results['scheduler'][3], 'price' => 85, 'desc' => 'Cooling System', 'color' => 'indigo'],
-        ['label' => 'Brake Pad Replacement', 'val' => $results['wear_tear'][0], 'price' => 195, 'desc' => 'Braking System', 'color' => 'indigo'],
-        ['label' => 'Tyre Replacement', 'val' => $results['wear_tear'][1], 'price' => 280, 'desc' => 'Traction & Safety', 'color' => 'indigo'],
-        ['label' => 'Wheel Alignment', 'val' => $results['wear_tear'][2], 'price' => 65, 'desc' => 'Handling & Balance', 'color' => 'indigo'],
-        ['label' => 'Engine Diagnostic', 'val' => $results['doctor'][0], 'price' => 150, 'desc' => 'Critical System Analysis', 'color' => 'indigo'],
-        ['label' => 'Battery Replacement', 'val' => $results['doctor'][1], 'price' => 230, 'desc' => 'Electrical System', 'color' => 'indigo'],
-        ['label' => 'Transmission Fluid', 'val' => $results['doctor'][2], 'price' => 210, 'desc' => 'Drivetrain Management', 'color' => 'indigo'],
+        // SCHEDULER TREE (2 Items)
+        ['label' => 'Engine Oil Service', 'val' => $results['scheduler'][0], 'price' => $oilPrice, 'desc' => 'Routine Lubrication', 'color' => 'indigo'],
+        ['label' => 'Oil Filter Replacement', 'val' => $results['scheduler'][1], 'price' => 10, 'desc' => 'Filtration Maintenance', 'color' => 'indigo'],
+
+        // WEAR & TEAR TREE (2 Items)
+        ['label' => 'Brake Pad Replacement', 'val' => $results['wear_tear'][0], 'price' => 210, 'desc' => 'Safety & Braking System', 'color' => 'indigo'],
+        ['label' => 'Tyre Replacement', 'val' => $results['wear_tear'][1], 'price' => 250, 'desc' => 'Traction & Alignment', 'color' => 'indigo'],
+
+        // DOCTOR DIAGNOSTIC TREE (10 Items)
+        ['label' => 'Battery Replacement', 'val' => $results['doctor'][0], 'price' => 280, 'desc' => 'Electrical System', 'color' => 'indigo'],
+        ['label' => 'Transmission Fluid', 'val' => $results['doctor'][1], 'price' => 215, 'desc' => 'Drivetrain Maintenance', 'color' => 'indigo'],
+        ['label' => 'Aircond Gas Topup', 'val' => $results['doctor'][2], 'price' => 30, 'desc' => 'Cooling Performance', 'color' => 'indigo'],
+        ['label' => 'Timing Belt Kit', 'val' => $results['doctor'][3], 'price' => 130, 'desc' => 'Critical Engine Timing', 'color' => 'indigo'],
+        ['label' => 'A/C Drive Belt', 'val' => $results['doctor'][4], 'price' => 15, 'desc' => 'Auxiliary System', 'color' => 'indigo'],
+        ['label' => 'Alternator Belt', 'val' => $results['doctor'][5], 'price' => 15, 'desc' => 'Charging System', 'color' => 'indigo'],
+        ['label' => 'Engine Oil Cap', 'val' => $results['doctor'][6], 'price' => 15, 'desc' => 'Seal Integrity', 'color' => 'indigo'],
+        ['label' => 'Lower Control Arm', 'val' => $results['doctor'][7], 'price' => 120, 'desc' => 'Suspension & Handling', 'color' => 'indigo'],
+        ['label' => 'Stabilizer Link', 'val' => $results['doctor'][8], 'price' => 116, 'desc' => 'Chassis Stability', 'color' => 'indigo'],
+        ['label' => 'Windshield Washer Motor', 'val' => $results['doctor'][9], 'price' => 23, 'desc' => 'Visibility System', 'color' => 'indigo'],
     ];
 
     $activeRecommendations = array_filter($recommendationMap, fn($item) => $item['val'] == 1);
@@ -56,7 +72,7 @@
                             <img src="{{ asset('storage/' . $car->car_image_path) }}" class="w-full h-full object-cover">
                         </div>
                         <h2 class="text-3xl font-black text-white tracking-tighter uppercase italic text-center leading-none">
-                            {{ $car->license_plate }} 
+                            {{ $car->license_plate }}
                         </h2>
                         <div class="mt-4 px-4 py-1 bg-white/10 rounded-full">
                             <span class="text-[20px] font-black text-indigo-300 uppercase tracking-widest">{{ $car->registered_year }} {{ $car->brand }} {{ $car->model }}</span>
@@ -107,6 +123,16 @@
                         </div>
                         <div class="mt-4 md:mt-0">
                             <p class="text-5xl font-black text-white tracking-tighter italic leading-none">RM {{ number_format($totalCost, 2) }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-white/10">
+                        <div class="flex items-center space-x-2 justify-center md:justify-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p class="text-[15px] font-black text-gray-500 uppercase tracking-[0.2em] italic">
+                                Estimate excludes labor charges and  service taxes.
+                            </p>
                         </div>
                     </div>
                 </div>

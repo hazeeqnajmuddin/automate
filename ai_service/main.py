@@ -5,25 +5,22 @@ import numpy as np
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-app = FastAPI(title="AutoMate AI Vehicle Diagnostic Service")
+app = FastAPI(title="AutoMate AI Diagnostic Engine")
 
 # --- CONFIGURATION ---
-# Path to your Jupyter notebooks folder containing the .pkl files
 MODEL_DIR = r"C:\Users\hazee\Documents\Jupyter Projects\AutoMate_AI\notebooks"
 
 # --- MODEL LOADING ---
 try:
-    # Match the exact filenames from your Jupyter directory
     model_scheduler = joblib.load(os.path.join(MODEL_DIR, 'Scheduler_Tree.pkl'))
     model_wear_tear = joblib.load(os.path.join(MODEL_DIR, 'WearTear_Tree.pkl'))
     model_doctor    = joblib.load(os.path.join(MODEL_DIR, 'Doctor_Tree.pkl'))
-    print("✅ All Decision Tree models (13-feature versions) loaded successfully.")
+    print("✅ All Decision Tree models loaded with 19-feature support.")
 except Exception as e:
-    print(f"❌ CRITICAL ERROR LOADING MODELS: {str(e)}")
+    print(f"❌ Error loading models: {str(e)}")
 
 # --- DATA SCHEMA ---
 class VehicleFeatures(BaseModel):
-    # These must match the order and naming from your Phase 4 training
     age: float
     fuel_type: int
     transmission_type: int
@@ -37,59 +34,89 @@ class VehicleFeatures(BaseModel):
     engine_noise: int
     engine_light: float
     battery_light_on: int
-    problem_description: str = "" # Optional field for user text input
+    problem_description: str = ""
 
 @app.post("/predict")
 def predict_maintenance(data: VehicleFeatures):
     try:
-        # 1. Process text prompt to override features if symptoms are detected
-        overrides = {}
+        # 1. REDO: OVERRIDE LOGIC BASED ON YOUR TRAINING DATA
+        # Initialize symptoms based on keyword detection
+        symptoms = {
+            'ac_warm': 0,
+            'engine_noise': 0,
+            'oil_cap': 0,
+            'knocking': 0,
+            'unstable': 0,
+            'washer': 0
+        }
+        
+        # Local copies of existing features for potential overrides
+        current_brake = data.brake_effectiveness
+        current_battery_light = data.battery_light_on
+
         if data.problem_description:
             text = data.problem_description.lower()
             
-            # --- FEATURE OVERRIDE LOGIC ---
-            # If user complains about brakes, simulate "Low" effectiveness (1)
-            if any(w in text for w in ["brake", "screech", "squeak", "grind"]):
-                overrides['brake_effectiveness'] = 1
+            # Symptom: A/C Issues (target_aircond_gastopup)
+            if any(w in text for w in ["hot", "warm", "ac", "aircond", "sweat"]):
+                symptoms['ac_warm'] = 1
                 
-            # If noise/knocking, simulate "Abnormal" engine noise (1)
-            if any(w in text for w in ["noise", "knock", "sound", "clatter", "click"]):
-                overrides['engine_noise'] = 1
+            # Symptom: Engine Noise
+            if any(w in text for w in ["loud", "ticking", "engine noise", "rattle", "noise from engine"]):
+                symptoms['engine_noise'] = 1
                 
-            # If tyre issues, simulate "Worn" tyres (1)
-            if any(w in text for w in ["tyre", "tire", "vibrate", "shake", "wobble"]):
-                overrides['tyre_tread'] = 1
+            # Symptom: Oil Leak/Cap (target_oil_cap)
+            if any(w in text for w in ["leak", "cap", "puddle", "drip", "oil on floor"]):
+                symptoms['oil_cap'] = 1
                 
-            # If engine startup/smoke issues, simulate Check Engine Light On (1.0)
-            if any(w in text for w in ["engine", "smoke", "power", "stall"]):
-                overrides['engine_light'] = 1.0
+            # Symptom: Knocking (target_lower_arm / target_stabilizer_link)
+            if any(w in text for w in ["knock", "clunk", "thud", "suspension", "bump"]):
+                symptoms['knocking'] = 1
                 
-            # If battery issues, simulate Battery Light On (1)
-            if any(w in text for w in ["battery", "start", "dim", "crank"]):
-                overrides['battery_light_on'] = 1
+            # Symptom: Unstable Handling (target_wheel_alignment)
+            if any(w in text for w in ["shake", "vibrate", "steering", "wobbly", "pulling"]):
+                symptoms['unstable'] = 1
+                
+            # Symptom: Washer Motor (target_motor_washer)
+            if any(w in text for w in ["washer", "spray", "wiper", "windshield"]):
+                symptoms['washer'] = 1
 
-        # 2. Map input to a dictionary with the EXACT column names from training
-        # Apply overrides if present, otherwise use the data from the request
+            # Feature Overrides: Brakes & Battery
+            if any(w in text for w in ["brake", "stop", "screech", "squeak"]):
+                current_brake = 1 # Set to Low Effectiveness (1)
+            
+            if any(w in text for w in ["battery", "cannot start", "dead", "crank"]):
+                current_battery_light = 1 # Set Battery Light On
+
+        # 2. CONSTRUCT INPUT DICTIONARY (MATCHES master_training_data_final.csv ORDER)
+        # The order below is EXACTLY how your model was trained
         input_dict = {
             'age': [data.age],
             'fuel_type': [data.fuel_type],
             'transmission_type': [data.transmission_type],
             'engine_size': [data.engine_size],
             'mileage': [data.mileage],
-            'tyre_tread': [overrides.get('tyre_tread', data.tyre_tread)],
-            'brake_effectiveness': [overrides.get('brake_effectiveness', data.brake_effectiveness)],
+            'tyre_tread': [data.tyre_tread],
+            'brake_effectiveness': [current_brake],
             'brand': [data.brand],
             'model': [data.model],
             'registered_year': [data.registered_year],
-            'engine_noise': [overrides.get('engine_noise', data.engine_noise)],
-            'engine_light': [overrides.get('engine_light', data.engine_light)],
-            'battery_light_on': [overrides.get('battery_light_on', data.battery_light_on)]
+            'engine_noise': [data.engine_noise],
+            'engine_light': [data.engine_light],
+            # Symptom features injected here
+            'symptom_ac_warm': [symptoms['ac_warm']],
+            'symptom_engine_noise': [symptoms['engine_noise']],
+            'symptom_oil_cap': [symptoms['oil_cap']],
+            'symptom_knocking_sound': [symptoms['knocking']],
+            'symptom_unstable_handling': [symptoms['unstable']],
+            'symptom_windshieldspray_break': [symptoms['washer']],
+            # battery_light_on is the final feature in your CSV
+            'battery_light_on': [current_battery_light]
         }
 
-        # 2. Convert to DataFrame to provide "Feature Names" and resolve UserWarnings
+        # 3. CONVERT TO DATAFRAME & PREDICT
         df = pd.DataFrame(input_dict)
 
-        # 3. Generate predictions (converting numpy arrays to standard Python lists)
         return {
             "scheduler": model_scheduler.predict(df)[0].tolist(),
             "wear_tear": model_wear_tear.predict(df)[0].tolist(),
@@ -97,11 +124,9 @@ def predict_maintenance(data: VehicleFeatures):
         }
 
     except Exception as e:
-        # Log error in terminal and return 500 to Laravel
         print(f"Prediction Error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
-    # Use port 8001 to avoid conflict with Laravel's default 8000
     uvicorn.run(app, host="127.0.0.1", port=8001)

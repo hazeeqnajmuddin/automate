@@ -96,10 +96,17 @@
                         <div class="mb-8">
                             <p class="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Common Symptoms</p>
                             <div class="flex flex-wrap gap-2">
-                                <button type="button" onclick="fillPrompt('Brakes screeching when stopping')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Brake Noise</button>
-                                <button type="button" onclick="fillPrompt('Knocking sound when going over bumps')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Knocking Sound</button>
-                                <button type="button" onclick="fillPrompt('Aircond blowing hot air')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">A/C Issues</button>
-                                <button type="button" onclick="fillPrompt('Steering wheel vibrating at high speed')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Vibration</button>
+                                <button type="button" onclick="fillPrompt('Knocking sound when going over bumps')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Suspension Knock</button>
+                                
+                                <button type="button" onclick="fillPrompt('Aircond is blowing hot air')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">A/C Hot Air</button>
+                                
+                                <button type="button" onclick="fillPrompt('Brakes screeching and hard to stop')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Brake Squeak</button>
+                                
+                                <button type="button" onclick="fillPrompt('Car is shaking and vibrating at high speed')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Unstable Steering</button>
+                                
+                                <button type="button" onclick="fillPrompt('I see an oil leak near the engine cap')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Oil Leakage</button>
+                                
+                                <button type="button" onclick="fillPrompt('Windshield washer spray is not working')" class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-[11px] font-bold text-slate-600 hover:bg-indigo-600 hover:text-white transition-all">Washer Motor</button>
                             </div>
                         </div>
 
