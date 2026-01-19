@@ -18,7 +18,7 @@ class AiController extends Controller
 
     public function generateRecommendations(Request $request)
     {
-        dd(env('https://automate-ai-api-production.up.railway.app'), config('services.ai.url'));
+        // dd(env('https://automate-ai-api-production.up.railway.app'), config('services.ai.url'));
 
 
         $request->validate([
