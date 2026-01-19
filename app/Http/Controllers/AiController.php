@@ -18,7 +18,7 @@ class AiController extends Controller
 
     public function generateRecommendations(Request $request)
     {
-        dd(env('https://automate-ai-api-production.up.railway.app'));
+        // dd(env('https://automate-ai-api-production.up.railway.app'));
 
         $request->validate([
             'car_id' => 'required|exists:cars,car_id',
@@ -53,7 +53,7 @@ class AiController extends Controller
 
         try {
             $response = Http::timeout(30)->post(
-            env('https://automate-ai-api-production.up.railway.app') . '/predict',
+            config('services.ai.url') . '/predict',
             $payload
                 );
             

@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'ai' => [
+    'url' => env('automate-ai-api-production.up.railway.app'),
+],
+
+
 ];
