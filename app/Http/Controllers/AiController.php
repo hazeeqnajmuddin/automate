@@ -67,6 +67,20 @@ class AiController extends Controller
                     $results['doctor'][7] = 1;
                 }
 
+                if (str_contains($input, 'hot') || str_contains($input, 'warm') || str_contains($input, 'aircond')) {
+                    // Zero out the Scheduler results (Indices 0 and 1 are Oil and Filter)
+                    $results['doctor'][8] = 0;
+                    $results['doctor'][1] = 0;
+                    
+                    // Ensure the Lower Arm (Doctor Index 7) is active
+                    $results['doctor'][2] = 1;
+                }
+
+                if (str_contains($input, 'brake') || str_contains($input, 'squeak')) {
+                    // Zero out the Scheduler results (Indices 0 and 1 are Oil and Filter)
+                    $results['doctor'][1] = 0;
+                }
+
                 return view('ai.recommend', compact('car', 'results'));
             }
             

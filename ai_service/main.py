@@ -39,7 +39,7 @@ class VehicleFeatures(BaseModel):
 @app.post("/predict")
 def predict_maintenance(data: VehicleFeatures):
     try:
-        # 1. REDO: OVERRIDE LOGIC BASED ON YOUR TRAINING DATA
+        # OVERRIDE LOGIC BASED ON YOUR TRAINING DATA
         # Initialize symptoms based on keyword detection
         symptoms = {
             'ac_warm': 0,
@@ -89,7 +89,6 @@ def predict_maintenance(data: VehicleFeatures):
                 current_battery_light = 1 # Set Battery Light On
 
         # 2. CONSTRUCT INPUT DICTIONARY (MATCHES master_training_data_final.csv ORDER)
-        # The order below is EXACTLY how your model was trained
         input_dict = {
             'age': [data.age],
             'fuel_type': [data.fuel_type],
@@ -103,18 +102,16 @@ def predict_maintenance(data: VehicleFeatures):
             'registered_year': [data.registered_year],
             'engine_noise': [data.engine_noise],
             'engine_light': [data.engine_light],
-            # Symptom features injected here
+
             'symptom_ac_warm': [symptoms['ac_warm']],
             'symptom_engine_noise': [symptoms['engine_noise']],
             'symptom_oil_cap': [symptoms['oil_cap']],
             'symptom_knocking_sound': [symptoms['knocking']],
             'symptom_unstable_handling': [symptoms['unstable']],
             'symptom_windshieldspray_break': [symptoms['washer']],
-            # battery_light_on is the final feature in your CSV
             'battery_light_on': [current_battery_light]
         }
 
-        # 3. CONVERT TO DATAFRAME & PREDICT
         df = pd.DataFrame(input_dict)
 
         return {
