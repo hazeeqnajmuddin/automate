@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('brake_conditions', function (Blueprint $table) {
             $table->id('brake_id');
             $table->foreignId('car_id')->constrained('cars', 'car_id')->onDelete('cascade');
-            $table->string('brake_noise')->nullable();
             $table->string('brake_effectiveness');
             $table->timestamps();
         });

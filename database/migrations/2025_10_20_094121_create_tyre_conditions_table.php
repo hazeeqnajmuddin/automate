@@ -11,9 +11,7 @@ return new class extends Migration
         Schema::create('tyre_conditions', function (Blueprint $table) {
             $table->id('tyre_id');
             $table->foreignId('car_id')->constrained('cars', 'car_id')->onDelete('cascade');
-            $table->string('tyre_size');
             $table->string('tyre_tread');
-            $table->string('tyre_pressure');
             $table->timestamps();
         });
     }
