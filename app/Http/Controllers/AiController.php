@@ -50,7 +50,10 @@ class AiController extends Controller
         ];
 
         try {
-            $response = Http::timeout(10)->post('http://127.0.0.1:8001/predict', $payload);
+            $response = Http::timeout(30)->post(
+            env('https://automate-ai-api-production.up.railway.app') . '/predict',
+            $payload
+                );
             
             if ($response->successful()) {
                 $results = $response->json();
