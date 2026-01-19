@@ -54,7 +54,7 @@ class AiController extends Controller
 
         try {
             $response = Http::timeout(30)->post(
-            config('services.ai.url') . '/predict',
+            'https://automate-ai-api-production.up.railway.app/predict',
             $payload
                 );
             
